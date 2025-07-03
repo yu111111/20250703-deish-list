@@ -23,29 +23,117 @@ document.addEventListener('DOMContentLoaded', async () => {
     let currentListId = null;
     let currentCategory = 'all';
 
-    // ユーザー情報を取得し、リストIDをセット
+    // ユーザー情報を取得
     const { data: { user } } = await supabaseClient.auth.getUser();
-    if (user) {
-        const { data: profile, error: profileError } = await supabaseClient
-            .from('profiles')
-            .select('username, list_id')
-            .eq('id', user.id)
-            .single();
 
-        if (profileError) {
-            console.error('プロフィール取得エラー:', profileError);
-            userNameSpan.textContent = 'ユーザー名不明';
-            // ログインページに戻すなどの処理が必要かもしれない
+    // 現在のページがindex.html（ログインページ）の場合
+    if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+        if (user) {
+            // ログイン済みならmain.htmlへリダイレクト
+            window.location.href = 'main.html';
+        }
+        // ログインしていない場合はindex.htmlに留まる（ログインフォームを表示）
+    }
+    // 現在のページがmain.htmlまたはsettings.htmlの場合
+    else if (window.location.pathname.endsWith('main.html') || window.location.pathname.endsWith('settings.html')) {
+        if (!user) {
+            // ログインしていない場合はindex.htmlへリダイレクト
             window.location.href = 'index.html';
         } else {
-            userNameSpan.textContent = profile.username || user.email;
-            currentListId = profile.list_id;
-            // 初期アイテム表示
-            await fetchAndDisplayItems(currentListId, currentCategory);
+            // ログイン済みならユーザー情報を取得して表示
+            const { data: profile, error: profileError } = await supabaseClient
+                .from('profiles')
+                .select('username, list_id')
+                .eq('id', user.id)
+                .single();
+
+            if (profileError) {
+                console.error('プロフィール取得エラー:', profileError);
+                // エラー時はログインページへリダイレクト
+                window.location.href = 'index.html';
+            } else {
+                // ユーザー名表示
+                if (userNameSpan) {
+                    userNameSpan.textContent = profile.username || user.email;
+                }
+                currentListId = profile.list_id;
+
+                // main.htmlの場合のみアイテム表示
+                if (window.location.pathname.endsWith('main.html')) {
+                    await fetchAndDisplayItems(currentListId, currentCategory);
+                }
+
+                // settings.htmlの場合の処理
+                if (window.location.pathname.endsWith('settings.html')) {
+                    const displayNameInput = document.getElementById('display-name');
+                    const updateDisplayNameButton = document.getElementById('update-display-name');
+                    const inviteCodeSpan = document.getElementById('invite-code');
+                    const joinInviteCodeInput = document.getElementById('join-invite-code');
+                    const joinListButton = document.getElementById('join-list');
+                    const backToMainButton = document.getElementById('back-to-main');
+
+                    // ユーザー名表示と招待コード表示
+                    if (displayNameInput) {
+                        displayNameInput.value = profile.username || '';
+                    }
+                    if (inviteCodeSpan) {
+                        inviteCodeSpan.textContent = profile.list_id || 'N/A';
+                    }
+
+                    // ユーザー名更新処理
+                    if (updateDisplayNameButton) {
+                        updateDisplayNameButton.addEventListener('click', async () => {
+                            const newDisplayName = displayNameInput.value;
+                            if (newDisplayName) {
+                                const { error } = await supabaseClient
+                                    .from('profiles')
+                                    .update({ username: newDisplayName })
+                                    .eq('id', user.id);
+
+                                if (error) {
+                                    alert('ユーザー名の更新に失敗しました: ' + error.message);
+                                } else {
+                                    alert('ユーザー名を更新しました！');
+                                    // 画面上のユーザー名も更新
+                                    if (userNameSpan) userNameSpan.textContent = newDisplayName;
+                                }
+                            } else {
+                                alert('表示名を入力してください。');
+                            }
+                        });
+                    }
+
+                    // リスト参加処理
+                    if (joinListButton) {
+                        joinListButton.addEventListener('click', async () => {
+                            const inviteCode = joinInviteCodeInput.value;
+                            if (inviteCode) {
+                                const { error } = await supabaseClient
+                                    .from('profiles')
+                                    .update({ list_id: inviteCode })
+                                    .eq('id', user.id);
+
+                                if (error) {
+                                    alert('リストへの参加に失敗しました: ' + error.message);
+                                } else {
+                                    alert('リストに参加しました！');
+                                    window.location.href = 'main.html';
+                                }
+                            } else {
+                                alert('招待コードを入力してください。');
+                            }
+                        });
+                    }
+
+                    // メインに戻るボタン
+                    if (backToMainButton) {
+                        backToMainButton.addEventListener('click', () => {
+                            window.location.href = 'main.html';
+                        });
+                    }
+                }
+            }
         }
-    } else {
-        // ログインしていない場合はログインページへリダイレクト
-        window.location.href = 'index.html';
     }
 
     // ログアウト処理
@@ -53,6 +141,49 @@ document.addEventListener('DOMContentLoaded', async () => {
         logoutButton.addEventListener('click', async () => {
             await supabaseClient.auth.signOut();
             window.location.href = 'index.html';
+        });
+    }
+
+    // サインアップ処理
+    const signupButton = document.getElementById('signup-button');
+    if (signupButton) {
+        signupButton.addEventListener('click', async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const { data, error } = await supabaseClient.auth.signUp({
+                email: email,
+                password: password,
+            });
+
+            if (error) {
+                alert('サインアップに失敗しました: ' + error.message);
+            } else {
+                alert('サインアップ成功！確認メールをチェックしてください。');
+            }
+        });
+    }
+
+    // ログイン処理
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); // フォームのデフォルト送信を防ぐ
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
+
+            if (error) {
+                alert('ログインに失敗しました: ' + error.message);
+            } else {
+                // ログイン成功後、main.htmlへリダイレクト
+                window.location.href = 'main.html';
+            }
         });
     }
 
@@ -223,9 +354,4 @@ document.addEventListener('DOMContentLoaded', async () => {
             toggleCompletedButton.textContent = isHidden ? '非表示にする' : '表示する';
         });
     }
-
-    // 初期読み込み（ログインチェック後に実行されるので不要な場合もある）
-    // if (currentListId) {
-    //     fetchAndDisplayItems(currentListId, currentCategory);
-    // }
 });
