@@ -69,6 +69,7 @@ body {
 .main-header h1 {
     font-size: 3rem;
     margin: 0;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3); /* 影を追加 */
 }
 
 .main-header p {
@@ -219,6 +220,11 @@ select {
     box-shadow: 0 4px 15px var(--shadow-color);
     display: flex;
     flex-direction: column;
+    transition: transform 0.3s ease; /* ホバー時のアニメーションを追加 */
+}
+
+.item-card:hover {
+    transform: translateY(-5px); /* ホバー時に上に5px移動 */
 }
 
 .item-card h3 {
