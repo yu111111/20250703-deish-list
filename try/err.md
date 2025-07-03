@@ -1,0 +1,1 @@
+script.js:170 アイテムの取得エラー: {code: 'PGRST201', details: Array(2), hint: "Try changing 'profiles' to one of the following: '…nd the desired relationship in the 'details' key.", message: "Could not embed because more than one relationship was found for 'items' and 'profiles'"}

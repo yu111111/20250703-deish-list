@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We Wishlist - 設定</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>設定</h1>
+            <nav>
+                <button id="back-to-main">メインに戻る</button>
+            </nav>
+        </header>
+
+        <section id="user-settings">
+            <h2>ユーザー設定</h2>
+            <div class="form-group">
+                <label for="display-name">表示名</label>
+                <input type="text" id="display-name" required>
+            </div>
+            <button id="update-display-name">保存</button>
+        </section>
+
+        <section id="partner-invitation">
+            <h2>パートナー招待</h2>
+            <div class="form-group">
+                <label>招待コード</label>
+                <span id="invite-code"></span>
+            </div>
+            <div class="form-group">
+                <label for="join-invite-code">招待コード入力</label>
+                <input type="text" id="join-invite-code">
+            </div>
+            <button id="join-list">リストに参加</button>
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
