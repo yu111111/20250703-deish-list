@@ -7,6 +7,7 @@
     --background-grad-end: #a195f2;
     --text-color: #333;
     --light-text-color: #f8f7ff;
+    --btn-primary-color: #FF92C2;
     --card-bg: #ffffff;
     --shadow-color: rgba(0, 0, 0, 0.1);
     --border-radius: 16px;
@@ -156,7 +157,7 @@ select {
 }
 
 #add-item-form button {
-    background-color: var(--primary-color);
+    background-color: var(--btn-primary-color);
     color: white;
     border: none;
     border-radius: 8px;
@@ -168,7 +169,8 @@ select {
 }
 
 #add-item-form button:hover {
-    background-color: var(--secondary-color);
+    background-color: var(--btn-primary-color);
+    opacity: 0.8;
 }
 
 /* フィルターセクション (main.html用) */
@@ -282,13 +284,14 @@ select {
     white-space: nowrap; /* ボタン内のテキストが改行されないように */
 }
 
-.item-card .complete-button {
-    background-color: var(--primary-color);
+.complete-button {
+    background-color: var(--btn-primary-color);
     color: white;
-    border: 1px solid var(--primary-color);
+    border: 0px solid var(--primary-color);
 }
-.item-card .complete-button:hover {
-    background-color: var(--secondary-color);
+.complete-button:hover {
+    background-color: var(--btn-primary-color);
+    opacity: 0.8;
 }
 
 .item-card .delete-button {
