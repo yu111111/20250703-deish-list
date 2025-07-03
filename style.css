@@ -1,51 +1,353 @@
+
+/* 基本設定 */
+:root {
+    --primary-color: #6d5dd8;
+    --secondary-color: #8a7ef0;
+    --background-grad-start: #7f72f0;
+    --background-grad-end: #a195f2;
+    --text-color: #333;
+    --light-text-color: #f8f7ff;
+    --card-bg: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --border-radius: 16px;
+    --font-family: 'Noto Sans JP', sans-serif;
+}
+
 body {
-    font-family: sans-serif;
+    font-family: var(--font-family);
+    background: linear-gradient(120deg, var(--background-grad-start), var(--background-grad-end));
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
     display: flex;
     justify-content: center;
-    align-items: center;
     min-height: 100vh;
-    margin: 0;
-    background-color: #f4f4f4;
 }
 
-.container {
-    background-color: #fff;
-    padding: 20px;
+.container, .login-container, .settings-container {
+    width: 100%;
+    max-width: 1200px;
+    background-color: transparent;
+}
+
+/* ユーザーナビ (main.html用) */
+.user-nav {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 20px;
+    color: var(--light-text-color);
+}
+
+.user-nav #user-name {
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+.user-nav button {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--light-text-color);
+    border: none;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.user-nav button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+
+/* ヘッダー (全ページ共通) */
+.main-header {
     text-align: center;
+    color: var(--light-text-color);
+    margin-bottom: 40px;
 }
 
-.form-group {
-    margin-bottom: 15px;
+.main-header h1 {
+    font-size: 3rem;
+    margin: 0;
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
+.main-header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* フォーム共通スタイル */
+.auth-form, .settings-section {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 25px var(--shadow-color);
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="text"],
+input[type="number"],
+select {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
     border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box; /* パディングとボーダーを幅に含める */
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1rem;
+    box-sizing: border-box;
 }
 
-button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 15px;
+/* ボタン共通スタイル */
+.primary-btn, .secondary-btn {
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: bold;
     cursor: pointer;
-    font-size: 16px;
-    margin: 5px;
+    transition: background-color 0.3s;
 }
 
-button:hover {
-    background-color: #0056b3;
+.primary-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.primary-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+.secondary-btn {
+    background-color: #ccc;
+    color: var(--text-color);
+}
+
+.secondary-btn:hover {
+    background-color: #bbb;
+}
+
+/* 入力セクション (main.html用) */
+.input-section {
+    background-color: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 25px var(--shadow-color);
+    margin-bottom: 30px;
+}
+
+#add-item-form {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+#add-item-form input,
+#add-item-form select {
+    flex-grow: 1;
+}
+
+#add-item-form input[type="number"] {
+    flex-grow: 0.5;
+}
+
+#add-item-form button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#add-item-form button:hover {
+    background-color: var(--secondary-color);
+}
+
+/* フィルターセクション (main.html用) */
+.filter-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+#category-filter-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-btn {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: var(--light-text-color);
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+    background-color: var(--card-bg);
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+/* ウィッシュリスト (main.html用) */
+.wishlist-container h2 {
+    color: var(--light-text-color);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.item-card {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: 0 4px 15px var(--shadow-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.item-card h3 {
+    margin: 0 0 5px 0;
+    font-size: 1.8rem; /* 項目名大きく */
+    color: var(--primary-color);
+}
+
+.item-card .category-badge {
+    background-color: var(--secondary-color);
+    color: white;
+    align-self: flex-start;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+}
+
+.item-card .price {
+    font-size: 1.2rem; /* 価格小さめ */
+    font-weight: bold;
+    color: #555;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.item-card .card-footer {
+    margin-top: auto; /* 下に寄せる */
+    display: flex;
+    justify-content: space-between; /* 追加者とボタンを左右に */
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.item-card .author {
+    color: #777;
+    font-size: 0.9rem;
+    text-align: right; /* 右寄せ */
+    flex-grow: 1; /* スペースを埋める */
+    margin-right: 10px;
+}
+
+.item-card .actions {
+    display: flex;
+    gap: 5px; /* ボタン間のスペースを小さく */
+}
+
+.item-card .actions button {
+    padding: 8px 12px; /* ボタンサイズ小さめ */
+    border-radius: 6px;
+    font-size: 0.9rem; /* ボタンの文字も小さめ */
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap; /* ボタン内のテキストが改行されないように */
+}
+
+.item-card .complete-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: 1px solid var(--primary-color);
+}
+.item-card .complete-button:hover {
+    background-color: var(--secondary-color);
+}
+
+.item-card .delete-button {
+    background-color: #ff6b6b;
+    color: white;
+    border: 1px solid #ff6b6b;
+}
+.item-card .delete-button:hover {
+    background-color: #ff8787;
+}
+
+/* 完了済みセクション (main.html用) */
+.completed-section-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 30px;
+}
+.completed-section-header h2 {
+    margin: 0;
+}
+#toggle-completed {
+    background: none;
+    border: 1px solid var(--light-text-color);
+    color: var(--light-text-color);
+    padding: 5px 15px;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+#completed-item-list .item-card {
+    opacity: 0.7;
+    background-color: #e9e4ff;
+}
+#completed-item-list .item-card .price {
+    text-decoration: line-through;
+}
+
+/* settings.html用 */
+.settings-section {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 25px var(--shadow-color);
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.invite-code-display {
+    background-color: #f0f0f0;
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+
+.invite-code-display label {
+    margin-right: 10px;
+}
+
+.invite-code-display span {
+    color: var(--primary-color);
 }

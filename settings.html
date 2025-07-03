@@ -3,40 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>We Wishlist - 設定</title>
+    <title>My Wishlist - 設定</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>設定</h1>
-            <nav>
-                <button id="back-to-main">メインに戻る</button>
-            </nav>
+    <div class="settings-container">
+        <header class="main-header">
+            <h1>✨ 設定</h1>
+            <p>アカウントとリストの管理</p>
         </header>
 
-        <section id="user-settings">
+        <section class="settings-section">
             <h2>ユーザー設定</h2>
-            <div class="form-group">
-                <label for="display-name">表示名</label>
-                <input type="text" id="display-name" required>
-            </div>
-            <button id="update-display-name">保存</button>
+            <input type="text" id="display-name" placeholder="表示名" required>
+            <button id="update-display-name" class="primary-btn">保存</button>
         </section>
 
-        <section id="partner-invitation">
+        <section class="settings-section">
             <h2>パートナー招待</h2>
-            <div class="form-group">
-                <label>招待コード</label>
+            <div class="invite-code-display">
+                <label>あなたの招待コード:</label>
                 <span id="invite-code"></span>
             </div>
-            <div class="form-group">
-                <label for="join-invite-code">招待コード入力</label>
-                <input type="text" id="join-invite-code">
-            </div>
-            <button id="join-list">リストに参加</button>
+            <input type="text" id="join-invite-code" placeholder="招待コードを入力">
+            <button id="join-list" class="primary-btn">リストに参加</button>
         </section>
+
+        <button id="back-to-main" class="secondary-btn">メインに戻る</button>
     </div>
     <script src="script.js"></script>
 </body>
