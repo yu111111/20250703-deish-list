@@ -326,6 +326,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (itemList) {
             new Sortable(itemList, {
                 animation: 150,
+                delay: 300, // 長押しを有効にするための遅延時間（ミリ秒）
                 ghostClass: 'sortable-ghost', // ドラッグ中のアイテムのスタイル
                 onEnd: async function (evt) {
                     const itemIds = Array.from(evt.from.children).map(item => item.dataset.id);
