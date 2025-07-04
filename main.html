@@ -26,14 +26,16 @@
         <section class="input-section">
             <form id="add-item-form">
                 <input type="text" id="item-name" placeholder="項目を入力" required>
-                <input type="number" id="price" placeholder="価格 (¥)">
-                <select id="category">
-                    <option value="" disabled selected>カテゴリを選択</option>
-                    <option value="電子機器">📱電子機器</option>
-                    <option value="ホーム">🏠️ホーム</option>
-                    <option value="旅行">✈️旅行</option>
-                    <option value="その他">その他</option>
-                </select>
+                <div class="price-category-wrapper">
+                    <input type="number" id="price" placeholder="価格 (¥)">
+                    <select id="category">
+                        <option value="" disabled selected>カテゴリを選択</option>
+                        <option value="電子機器">📱電子機器</option>
+                        <option value="ホーム">🏠️ホーム</option>
+                        <option value="旅行">✈️旅行</option>
+                        <option value="その他">その他</option>
+                    </select>
+                </div>
                 <button type="submit"><span class="material-symbols-outlined">add</span></button>
             </form>
         </section>

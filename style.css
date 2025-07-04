@@ -148,13 +148,22 @@ select {
     align-items: center;
 }
 
-#add-item-form input,
-#add-item-form select {
+#add-item-form input[type="text"] {
     flex-grow: 1;
 }
 
-#add-item-form input[type="number"] {
-    flex-grow: 0.5;
+.price-category-wrapper {
+    display: flex;
+    gap: 15px;
+    flex-grow: 1;
+}
+
+.price-category-wrapper input[type="number"] {
+    flex-grow: 1;
+}
+
+.price-category-wrapper select {
+    flex-grow: 1;
 }
 
 #add-item-form button {
@@ -172,6 +181,23 @@ select {
 #add-item-form button:hover {
     background-color: var(--primary-color);
     opacity: 0.8;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    #add-item-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #add-item-form > * {
+        width: 100%;
+    }
+
+    .price-category-wrapper {
+        display: flex;
+        gap: 15px;
+    }
 }
 
 /* フィルターセクション (main.html用) */
