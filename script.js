@@ -270,9 +270,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 price,
                 category,
                 is_completed,
-                profiles!author_id(username)
+                profiles!author_id(username),
+                order_index
             `)
             .eq('list_id', listId)
+            .order('order_index', { ascending: true, nullsFirst: false })
             .order('created_at', { ascending: false });
 
         if (category !== 'all') {
@@ -319,6 +321,43 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // イベントリスナーを再設定
         addCardActionListeners();
+
+        // Sortable.jsの初期化
+        if (itemList) {
+            new Sortable(itemList, {
+                animation: 150,
+                ghostClass: 'sortable-ghost', // ドラッグ中のアイテムのスタイル
+                onEnd: async function (evt) {
+                    const itemIds = Array.from(evt.from.children).map(item => item.dataset.id);
+                    await updateItemOrder(itemIds);
+                }
+            });
+        }
+    }
+
+    // アイテムの順序を更新する関数
+    async function updateItemOrder(itemIds) {
+        const updates = itemIds.map((id, index) => ({
+            id: id,
+            order_index: index // 新しい順序を保存
+        }));
+
+        for (let i = 0; i < itemIds.length; i++) {
+            const itemId = itemIds[i];
+            const newOrderIndex = i;
+
+            const { error } = await supabaseClient
+                .from('items')
+                .update({ order_index: newOrderIndex })
+                .eq('id', itemId);
+
+            if (error) {
+                console.error(`アイテム ${itemId} の順序更新エラー:`, error);
+                alert(`アイテム ${itemId} の順序更新に失敗しました: ` + error.message);
+                return; // エラーが発生したら処理を中断
+            }
+        }
+        console.log('アイテムの順序が更新されました。');
     }
 
     // カード内のボタンやカード自体にイベントリスナーを設定する関数

@@ -256,6 +256,12 @@ select {
     transform: translateY(-5px); /* ホバー時に上に5px移動 */
 }
 
+.sortable-ghost {
+    opacity: 0.4;
+    background-color: #f0f0f0;
+    border: 2px dashed var(--primary-color);
+}
+
 .item-card h3 {
     margin: 0 0 5px 0;
     font-size: 1.8rem; /* 項目名大きく */
