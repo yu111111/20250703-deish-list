@@ -65,6 +65,30 @@
                 <!-- Completed items will be dynamically inserted here -->
             </div>
         </main>
+
+        <!-- Edit Item Modal -->
+        <div id="edit-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>アイテムを編集</h2>
+                <form id="edit-item-form">
+                    <input type="hidden" id="edit-item-id">
+                    <label for="edit-item-name">項目名</label>
+                    <input type="text" id="edit-item-name" required>
+                    <label for="edit-price">価格</label>
+                    <input type="number" id="edit-price" placeholder="価格 (¥)">
+                    <label for="edit-category">カテゴリ</label>
+                    <select id="edit-category">
+                        <option value="電子機器">📱電子機器</option>
+                        <option value="ホーム">🏠️ホーム</option>
+                        <option value="旅行">✈️旅行</option>
+                        <option value="その他">その他</option>
+                    </select>
+                    <button type="submit" class="primary-btn">更新</button>
+                </form>
+            </div>
+        </div>
+
     </div>
     <script src="script.js"></script>
 </body>

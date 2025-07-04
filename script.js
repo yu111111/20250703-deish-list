@@ -20,8 +20,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const completedItemList = document.getElementById('completed-item-list');
     const toggleCompletedButton = document.getElementById('toggle-completed');
 
+    // モーダル関連のDOM要素
+    const editModal = document.getElementById('edit-modal');
+    const editForm = document.getElementById('edit-item-form');
+    const editItemId = document.getElementById('edit-item-id');
+    const editItemName = document.getElementById('edit-item-name');
+    const editPrice = document.getElementById('edit-price');
+    const editCategory = document.getElementById('edit-category');
+    const closeModalButton = document.querySelector('.close-button');
+
     let currentListId = null;
     let currentCategory = 'all';
+    let allItems = []; // アイテムデータを保持する配列
 
     // ユーザー情報を取得
     const { data: { user } } = await supabaseClient.auth.getUser();
@@ -276,12 +286,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
+        allItems = items; // 取得したアイテムをグローバル変数に保存
+
         itemList.innerHTML = '';
         completedItemList.innerHTML = '';
 
         items.forEach(item => {
             const card = document.createElement('div');
             card.className = 'item-card';
+            card.dataset.id = item.id; // カード自体にIDを持たせる
             card.innerHTML = `
                 <h3>${item.item_name}</h3>
                 <div class="category-badge">${item.category}</div>
@@ -308,10 +321,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         addCardActionListeners();
     }
 
-    // カード内のボタンにイベントリスナーを設定する関数
+    // カード内のボタンやカード自体にイベントリスナーを設定する関数
     function addCardActionListeners() {
+        // カード自体（編集用）
+        document.querySelectorAll('.item-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                // クリックがボタンでなければモーダルを開く
+                if (!e.target.closest('button')) {
+                    openEditModal(card.dataset.id);
+                }
+            });
+        });
+
+        // 完了ボタン
         document.querySelectorAll('.complete-button').forEach(button => {
             button.addEventListener('click', async (e) => {
+                e.stopPropagation(); // 親要素へのイベント伝播を停止
                 const itemId = e.currentTarget.dataset.id;
                 const isCompleted = e.currentTarget.dataset.completed === 'true';
                 const { error } = await supabaseClient
@@ -327,8 +352,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         });
 
+        // 削除ボタン
         document.querySelectorAll('.delete-button').forEach(button => {
             button.addEventListener('click', async (e) => {
+                e.stopPropagation(); // 親要素へのイベント伝播を停止
                 const itemId = e.currentTarget.dataset.id;
                 if (confirm('本当に削除しますか？')) {
                     const { error } = await supabaseClient
@@ -343,6 +370,58 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }
                 }
             });
+        });
+    }
+
+    // モーダルを開く関数
+    function openEditModal(itemId) {
+        const item = allItems.find(i => i.id == itemId);
+        if (item) {
+            editItemId.value = item.id;
+            editItemName.value = item.item_name;
+            editPrice.value = item.price;
+            editCategory.value = item.category;
+            editModal.style.display = 'flex';
+        }
+    }
+
+    // モーダルを閉じる関数
+    function closeEditModal() {
+        editModal.style.display = 'none';
+    }
+
+    // モーダルの閉じるボタンと背景クリックのイベントリスナー
+    if(closeModalButton) {
+        closeModalButton.addEventListener('click', closeEditModal);
+    }
+    window.addEventListener('click', (e) => {
+        if (e.target == editModal) {
+            closeEditModal();
+        }
+    });
+
+    // 編集フォームの送信処理
+    if (editForm) {
+        editForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const itemId = editItemId.value;
+            const updatedData = {
+                item_name: editItemName.value,
+                price: editPrice.value ? parseInt(editPrice.value, 10) : null,
+                category: editCategory.value
+            };
+
+            const { error } = await supabaseClient
+                .from('items')
+                .update(updatedData)
+                .eq('id', itemId);
+
+            if (error) {
+                alert('アイテムの更新に失敗しました: ' + error.message);
+            } else {
+                closeEditModal();
+                await fetchAndDisplayItems(currentListId, currentCategory);
+            }
         });
     }
 
