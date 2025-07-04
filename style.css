@@ -32,21 +32,28 @@ body {
     background-color: transparent;
 }
 
-/* ユーザーナビ (main.html用) */
-.user-nav {
+/* トップバー (main.html用) */
+.top-bar {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
     color: var(--light-text-color);
+    position: relative; /* タイトル中央寄せのため */
 }
 
-.user-nav #user-name {
-    margin-right: 15px;
+.top-bar-left,
+.top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.top-bar #user-name {
     font-weight: bold;
 }
 
-.user-nav button {
+.top-bar button {
     background: rgba(255, 255, 255, 0.2);
     color: var(--light-text-color);
     border: none;
@@ -56,16 +63,19 @@ body {
     transition: background-color 0.3s;
 }
 
-.user-nav button:hover {
+.top-bar button:hover {
     background: rgba(255, 255, 255, 0.3);
 }
 
-
 /* ヘッダー (全ページ共通) */
 .main-header {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     text-align: center;
     color: var(--light-text-color);
-    margin-bottom: 40px;
+    margin: 0; /* 上下マージンをリセット */
+    width: fit-content; /* コンテンツの幅に合わせる */
 }
 
 .main-header h1 {
@@ -197,6 +207,13 @@ select {
     .price-category-wrapper {
         display: flex;
         gap: 15px;
+    }
+
+    .main-header h1 {
+        font-size: 1.5rem; /* スマホ表示時のタイトルサイズをさらに小さく */
+        white-space: nowrap; /* テキストを1行に固定 */
+        overflow: hidden; /* はみ出した部分を非表示 */
+        text-overflow: ellipsis; /* はみ出したテキストを省略記号で表示 */
     }
 }
 
