@@ -1,3 +1,0 @@
-refactor: Remove supabase/pass.md
-
-Removed the temporary password file.

@@ -290,9 +290,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class="author">${item.profiles.username}</div>
                     <div class="actions">
                         <button class="complete-button" data-id="${item.id}" data-completed="${item.is_completed}">
-                            ${item.is_completed ? '↩️' : '✔️'}
+                            <span class="material-symbols-outlined">${item.is_completed ? 'undo' : 'check_circle'}</span>
                         </button>
-                        <button class="delete-button" data-id="${item.id}">🗑️</button>
+                        <button class="delete-button" data-id="${item.id}"><span class="material-symbols-outlined">delete</span></button>
                     </div>
                 </div>
             `;
@@ -312,8 +312,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     function addCardActionListeners() {
         document.querySelectorAll('.complete-button').forEach(button => {
             button.addEventListener('click', async (e) => {
-                const itemId = e.target.dataset.id;
-                const isCompleted = e.target.dataset.completed === 'true';
+                const itemId = e.currentTarget.dataset.id;
+                const isCompleted = e.currentTarget.dataset.completed === 'true';
                 const { error } = await supabaseClient
                     .from('items')
                     .update({ is_completed: !isCompleted })
@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         document.querySelectorAll('.delete-button').forEach(button => {
             button.addEventListener('click', async (e) => {
-                const itemId = e.target.dataset.id;
+                const itemId = e.currentTarget.dataset.id;
                 if (confirm('本当に削除しますか？')) {
                     const { error } = await supabaseClient
                         .from('items')
