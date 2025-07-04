@@ -301,6 +301,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <h3>${item.item_name}</h3>
                 <div class="category-badge">${item.category}</div>
                 ${item.price ? `<div class="price">¥${item.price.toLocaleString()}</div>` : ''}
+                <div class="drag-handle"><span class="material-symbols-outlined">drag_indicator</span></div>
                 <div class="card-footer">
                     <div class="author">${item.profiles.username}</div>
                     <div class="actions">
@@ -326,6 +327,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (itemList) {
             new Sortable(itemList, {
                 animation: 150,
+                handle: '.drag-handle', // ドラッグハンドルとしてアイコンを指定
                 ghostClass: 'sortable-ghost', // ドラッグ中のアイテムのスタイル
                 onEnd: async function (evt) {
                     const itemIds = Array.from(evt.from.children).map(item => item.dataset.id);

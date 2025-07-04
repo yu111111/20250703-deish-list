@@ -250,6 +250,23 @@ select {
     display: flex;
     flex-direction: column;
     transition: transform 0.3s ease; /* ホバー時のアニメーションを追加 */
+    position: relative; /* drag-handleの絶対配置のために追加 */
+}
+
+.drag-handle {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    cursor: grab;
+    color: #ccc; /* 目立たない色 */
+    font-size: 1.5rem;
+    padding: 5px;
+    border-radius: 50%;
+    transition: color 0.2s ease;
+}
+
+.drag-handle:hover {
+    color: var(--primary-color); /* ホバーで色を濃く */
 }
 
 .item-card:hover {
